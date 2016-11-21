@@ -1,0 +1,41 @@
+{
+	"variables": {
+		"ssh_name": "vagrant",
+		"ssh_pass": "vagrant",
+		"hostname": "tonfa-build-box",
+		"kickstart": "ks.cfg"
+	},
+
+	"builders": [
+		{
+			"type": "virtualbox-iso",
+			"guest_os_type": "Fedora_64",
+			"iso_url": "http://mirror.math.princeton.edu/pub/fedora/linux/releases/24/Server/x86_64/iso/Fedora-Server-netinst-x86_64-24-1.2.iso",
+			"iso_checksum": "071c30520775b3e93bb4c34edab4eab3badc26fbb8473ad3a9458614ba85a4e5",
+			"iso_checksum_type": "sha256",
+			"boot_command": [
+				"<tab> linux cmdline ks=http://{{.HTTPIP}}:{{.HTTPPort}}/{{user `kickstart`}}<enter><enter>"
+			],
+			"http_directory": "http",
+			"ssh_username": "{{user `ssh_name`}}",
+			"ssh_password": "{{user `ssh_pass`}}",
+			"ssh_wait_timeout": "20m",
+			"shutdown_command": "echo '{{user `ssh_pass`}}' | sudo -S shutdown -P now",
+			"vboxmanage": [
+				["modifyvm", "{{.Name}}", "--memory", "2048"],
+				["modifyvm", "{{.Name}}", "--cpus", "2"]
+			],
+			"name": "{{user `hostname`}}",
+			"vm_name": "{{user `hostname`}}",
+			"headless": true,
+			"disk_size": 60480
+		}
+	],
+	"post-processors": [
+		{
+			"type": "vagrant",
+			"compression_level": 9,
+			"output": "{{.BuildName}}-{{.Provider}}.box"
+		}
+	]
+}
