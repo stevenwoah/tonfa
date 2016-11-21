@@ -31,6 +31,13 @@
 			"disk_size": 60480
 		}
 	],
+	"provisioners": [
+		{
+			"type": "shell",
+			"script": "scripts/virtualbox-additions.sh",
+			"execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S sh '{{.Path}}'"
+		}
+	],
 	"post-processors": [
 		{
 			"type": "vagrant",
