@@ -7,7 +7,6 @@ VBOX_TMP="/tmp/VBox"
 
 # Fix for not finding version.h
 ln -s /usr/include/linux/version.h /lib/modules/`uname -r`/build/include/linux/
-ln -s /usr/src/kernels/`uname -r`/include/generated/autoconf.h /lib/modules/`uname -r`/build/include/generated/
 
 mkdir -p ${MOUNT_DIR};
 mount -o loop ${VBOX_ISO} ${MOUNT_DIR};
